@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Exit early if any commands fail
+set -e
+
+exec bundle exec ruby app/server.rb
