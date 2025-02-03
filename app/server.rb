@@ -4,15 +4,25 @@ require 'socket'
 
 server = TCPServer.new('localhost', 4221)
 
+HTTP_RESPONSE_PATTERN = "HTTP/1.1 %s\r\n%s\r\n%s"
+HTTP_RESPONSE_CODE = {
+  200 => '200 OK',
+  404 => '404 Not Found'
+}.freeze
+
+def respond_to_client(client, status, headers, body)
+  client.puts format(HTTP_RESPONSE_PATTERN, HTTP_RESPONSE_CODE[status], headers, body)
+end
+
 loop do
   client = server.accept
   request = client.gets.chomp
   _, path = request.split
 
   if path == '/'
-    client.puts format("HTTP/1.1 %s\r\n%s\r\n%s", 200, '', '')
+    respond_to_client client, 200, '', ''
   else
-    # do somethign here soon
+    respond_to_client client, 404, '', ''
   end
 
   client.close
