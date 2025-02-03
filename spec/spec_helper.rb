@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 require 'rspec'
+require 'net/http'
 
 module RSpecMixin
   def server_url
     'http://localhost:4221'
+  end
+
+  def get_response(path: '/', url: server_url)
+    Net::HTTP.get_response(URI.join(url, path))
   end
 end
 
